@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<head>
+<meta charset="UTF-8">
+<title>Thymeleaf</title>
+</head>
+<body>
+	<h1>[Thymeleaf의 Security 관련 속성]</h1>
+	
+	<!-- 로그인 하지 않은 경우 -->
+	<div sec:authorize="not isAuthenticated()">
+		<p>로그인 하지 않음</p>
+		<p th:text="${#authentication.name}"></p>
+	</div>
+	
+	<!-- 로그인 했을 때만 보이는 부분 -->
+	<div sec:authorize="isAuthenticated()">
+		<p>로그인 했음</p>
+		<p th:text="${#authentication}"></p>
+		<p th:text="${#authentication.name}"></p>
+		<p th:text="${#authentication.principal}"></p>
+		<p th:text="${#authentication.principal.enabled}"></p>
+		<p th:text="${#authentication.principal.authorities}"></p>
+		
+		<p sec:authorize="hasRole('USER')">일반사용자입니다.</p>
+		<p sec:authorize="hasRole('ADMIN')">관리자입니다.</p>
+		
+	</div>
+	
+</body>
+</html>

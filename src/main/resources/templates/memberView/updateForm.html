@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>update</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/spring5.css}"></link>
+<script>
+</script>
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+		  <div class="container-fluid">
+		    <a class="navbar-brand" th:href="@{/}">Spring5</a>
+		    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+		      <span class="navbar-toggler-icon"></span>
+		    </button>
+		    <div class="collapse navbar-collapse" id="navbarColor01">
+		      <ul class="navbar-nav me-auto">
+	   	        <li class="nav-item">
+		          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">Logout</a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/updateForm}">Profile</a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link" th:href="@{/board/list}">Board</a>
+		        </li>
+		      </ul>
+			<form class="d-flex" th:action="@{/board/list}" method="get">
+				<input type="hidden" name="type" value="all">
+				<input class="form-control me-sm-2" type="search" placeholder="Search" name="searchWord">
+				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		    </div>
+		  </div>
+		</nav>
+		<h1>PROFILE</h1>
+	</header>
+	<form th:action="@{/member/update}" method="post">
+		<table class="update">
+			<tr>
+				<th>ID</th>
+				<td>
+					<input type="text" name="memberid" id="memberid" th:value="${member.memberid}" readonly>
+				</td>
+			</tr>
+			<tr>
+				<th>비밀번호</th>
+				<td>
+					<input type="password" name="memberpw" id="memberpw1" placeholder="비밀번호 입력"><br>
+					<input type="password" id="memberpw2" placeholder="비밀번호 다시 입력">
+				</td>
+			</tr>
+			<tr>
+				<th>이름</th>
+				<td>
+					<input type="text" name="membername" th:value="${member.membername}" readonly>
+				</td>
+			</tr>
+			<tr>
+				<th>이메일</th>
+				<td>
+					<input type="text" name="email" th:value="${member.email}">
+				</td>
+			</tr>
+			<tr>
+				<th>전화번호</th>
+				<td>
+					<input type="text" name="phone" th:value="${member.phone}">
+				</td>
+			</tr>
+			<tr>
+				<th>주소</th>
+				<td>
+					<input type="text" name="address" th:value="${member.address}" style="width:250px;">
+				</td>
+			</tr>
+		</table>
+		<div class="button">
+			<input type="submit" value="수정" class="btn btn-primary">
+			<input type="reset" value="다시 쓰기" class="btn btn-secondary">
+		</div>
+	</form>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.spring5.dao.BoardDAO">
+
+	<!-- 글쓰기 -->
+	<insert id="insert" parameterType="Board">
+	insert into spring5_board
+		(
+		boardnum
+		, memberid
+		, title
+		, contents
+		<if test="originalfile != null and savedfile != null">
+		, originalfile
+		, savedfile
+		</if>
+		)
+	values
+		(
+		spring5_board_seq.nextval
+		, #{memberid}
+		, #{title}
+		, #{contents}
+		<if test="originalfile != null and savedfile != null">
+		, #{originalfile}
+		, #{savedfile}
+		</if>
+		)
+	</insert>
+	
+	<!-- 글 목록 -->
+	<select id="list" resultType="Board">
+	select
+		boardnum, title, memberid, hits, to_char(inputdate, 'yyyy-mm-dd') inputdate
+	from
+		spring5_board
+	<where>
+		<if test="type == 'title'">
+		and upper(title) like upper('%' || #{searchWord} || '%')
+		</if>
+		<if test="type == 'contents'">
+		and upper(contents) like upper('%' || #{searchWord} || '%')
+		</if>
+		<if test="type == 'memberid'">
+		and memberid = #{searchWord}
+		</if>
+		<if test="type == 'all'">
+		and
+		upper(title) like upper('%' || #{searchWord} || '%')
+		or
+		upper(contents) like upper('%' || #{searchWord} || '%')
+		or
+		upper(memberid) like upper('%' || #{searchWord} || '%')
+		</if>
+	</where>
+	order by boardnum desc
+	</select>
+	
+	<!-- 전체 글 개수  -->
+	<select id="getTotal" parameterType="hashmap" resultType="int">
+	select
+		count(*)
+	from
+		spring5_board
+	<where>
+		<if test="type == 'title'">
+		and upper(title) like upper('%' || #{searchWord} || '%')
+		</if>
+		<if test="type == 'contents'">
+		and upper(contents) like upper('%' || #{searchWord} || '%')
+		</if>
+		<if test="type == 'memberid'">
+		and upper(memberid) = upper(#{searchWord})
+		</if>
+		<if test="type == 'all'">
+		and
+		upper(title) like upper('%' || #{searchWord} || '%')
+		or
+		upper(contents) like upper('%' || #{searchWord} || '%')
+		or
+		upper(memberid) like upper('%' || #{searchWord} || '%')
+		</if>
+	</where>
+	</select>
+	
+	<!-- 글 읽기 -->
+	<select id="read" resultType="Board">
+	select
+		boardnum, memberid, to_char(inputdate, 'yyyy-mm-dd hh:mm:ss') inputdate, hits, title, contents, originalfile, savedfile
+	from
+		spring5_board
+	where boardnum=#{boardnum}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateHits">
+	update spring5_board set hits=hits+1 where boardnum=#{boardnum}
+	</update>
+	
+	<!-- 글 수정 -->
+	<update id="updateBoard" parameterType="Board">
+	update spring5_board
+	set
+		title=#{title}
+		, contents=#{contents}
+		, inputdate=sysdate
+		<if test="originalfile != null and savedfile != null">
+		, originalfile=#{originalfile}
+		, savedfile=#{savedfile}
+		</if>
+	where boardnum=#{boardnum} and memberid=#{memberid}
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="deleteBoard" parameterType="Board">
+	delete from spring5_board where boardnum=#{boardnum} and memberid=#{memberid}
+	</delete>
+	
+	<!-- 댓글 작성 -->
+	<insert id="insertReply" parameterType="Reply">
+	insert into spring5_reply
+	(replynum, boardnum, memberid, replytext)
+	values
+	(spring5_reply_seq.nextval, #{boardnum}, #{memberid}, #{replytext})
+	</insert>
+	
+	<!-- 댓글 읽기 -->
+	<select id="readReply" parameterType="Reply">
+	select
+	replynum, boardnum, memberid, replytext, to_char(inputdate,'yyyy-mm-dd') inputdate
+	from spring5_reply
+	where boardnum=#{boardnum}
+	order by replynum desc
+	</select>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="Reply">
+	delete from spring5_reply
+	where replynum=#{replynum} and memberid=#{memberid}
+	</delete>
+	
+	<!-- 댓글 선택 -->
+	<select id="selectReply" resultType="Reply">
+	select
+	replynum, boardnum, memberid, replytext, to_char(inputdate,'yyyy-mm-dd') inputdate
+	from spring5_reply
+	where replynum=#{replynum}
+	</select>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateReply" parameterType="Reply">
+	update
+		spring5_reply
+	set
+		replytext=#{replytext}
+	where
+		replynum=#{replynum} and memberid=#{memberid}
+	</update>
+	
+	<delete id="deleteCheck" parameterType="map">
+	delete from spring5_board
+	where boardnum in
+    <foreach collection="deletenum" item="item" open="(" close=")" separator=",">
+	#{item}
+	</foreach>
+	<if test="memberid != 'admin'">
+	and memberid = #{memberid}
+	</if>
+	</delete>
+	
+</mapper>

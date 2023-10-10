@@ -1,0 +1,139 @@
+/* spring5.css */
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable.css");
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+	font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
+pre {
+	font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+	font-size: 16px;
+}
+
+/* 제목 스타일 */
+h1 {
+	text-align: center;
+	margin: 20px;
+}
+
+/* 테이블 스타일 */
+table {
+	width: 100%;
+}
+
+th {
+	border: 1px solid white;
+	text-align: left;
+	padding: 5px;
+	background-color: #D8D8D8;
+	width: 100px;
+}
+
+td {
+	border: 1px solid white;
+	padding: 5px;
+	background-color: #F2F2F2;
+}
+
+/* 버튼 영역 */
+.button {
+	text-align:center;
+	margin: 20px;
+	display: flex;
+	justify-content: center;
+}
+
+/* 버튼 float */
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+/* 홈 */
+.home {
+	text-align: center;
+	margin: 220px auto;
+}
+
+/* 회원가입 폼 */
+.join {
+	width: 450px;
+	margin: 0 auto;
+}
+
+/* 로그인 폼 */
+.login {
+	margin: 0 auto;
+	width: 300px;
+}
+
+/* 회원정보 수정 폼 */
+.update {
+	width: 450px;
+	margin: 0 auto;
+}
+
+/* 글쓰기 폼 */
+/* text */
+.write {
+	width: 900px;
+	margin: 0 auto;
+}
+
+.write.contents{
+	width: 800px;
+	height: 300px;
+}
+
+.title {
+	width: 800px;
+}
+
+/* textarea */
+textarea.contents {
+	width: 800px;
+	height: 300px;
+}
+
+/* 글 목록 */
+.list {
+	width: 950px;
+	margin: 0 auto;
+}
+
+.list td {
+	text-align: center;
+}
+
+/* 글 읽기 */
+.board {
+	width: 900px;
+	margin: 0 auto;
+}
+
+.board .contents {
+	width: 800px;
+	height: 300px;
+	display: block;
+}
+
+.reply {
+	width: 800px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.replyWrite td {
+	background-color: white;
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>board</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/spring5.css}"></link>
+<script>
+	function deleteBoard(boardnum) {
+		if (confirm("게시물을 삭제하시겠습니까?")) {
+			location.href='delete?boardnum=' + boardnum;
+			/* document.getElementById('boardnum').value = boardnum;
+			document.getElementById('deleteForm').submit(); */
+		}
+	}
+	
+	function insertReply() {
+		let txt=document.getElementById('replytext').value;
+		if (txt==null || txt=='') {
+			confirm("댓글 내용을 입력해주세요.");
+			return false;
+		}
+	}
+	
+	function updateReply(replynum) {
+		let url='updateReply?replynum=' + replynum;
+		window.open(url, 'updateReply', 'width=600, height=50, left=100, top=100');
+	}
+</script>
+</head>
+<body>
+	<header>
+	<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" th:href="@{/}">Spring5</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarColor01">
+	      <ul class="navbar-nav me-auto">
+	        <li class="nav-item">
+	          <a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/member/join}">Join</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/member/loginForm}">Login</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">Logout</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/updateForm}">Profile</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" th:href="@{/board/list}">Board</a>
+	        </li>
+	      </ul>
+		<form class="d-flex" th:action="@{/board/list}" method="get">
+			<input type="hidden" name="type" value="all">
+			<input class="form-control me-sm-2" type="search" placeholder="Search" name="searchWord">
+			<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+		</form>
+	    </div>
+	  </div>
+	</nav>
+	<h1>BOARD</h1>
+	</header>
+	<section>
+	<!-- <form th:action="@{/board/delete}" method="post" id="deleteForm">
+		<input type="hidden" name="boardnum" id="boardnum">
+	</form> -->
+		<table class="board">
+			<tr>
+				<th>작성자</th>
+				<td th:text="${board.memberid}"></td>
+			</tr>
+			<tr>
+				<th>작성일</th>
+				<td th:text="${board.inputdate}"></td>
+			</tr>
+			<tr>
+				<th>조회수</th>
+				<td th:text="${board.hits}"></td>
+			</tr>
+			<tr>
+				<th>제목</th>
+				<td th:text="${board.title}"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td class="contents">
+					<pre th:text="${board.contents}"></pre>
+				</td>
+			</tr>
+			<tr>
+				<th>첨부파일</th>
+				<td>
+					<a th:href="@{/board/download(boardnum=${board.boardnum})}">
+					<img th:if="${board.originalfile}" th:src="@{/board/download(boardnum=${board.boardnum})}" style="width:500px;">
+					</a>
+				</td>
+			</tr>
+		</table>
+		<br>
+		
+		<div class="button" th:if="${#authentication.name} == ${board.memberid}">
+			<a th:href="@{/board/update(boardnum=${board.boardnum})}">
+				<input type="button" value="수정" class="btn btn-primary">
+			</a>
+			<a th:href="|javascript:deleteBoard(${board.boardnum})|">
+				<input type="button" value="삭제" class="btn btn-secondary">
+			</a>
+		</div>
+		
+		<!-- 리플 작성 폼 -->
+		<div class="reply">
+		<form th:action="@{/board/insertReply}" method="post" onsubmit="return insertReply()">
+		<table class="replyWrite">
+			<tr>
+				<td>
+				<h5>REPLY</h5>
+				</td>
+				<td>
+					<input type="text" name="replytext" id="replytext" style="width: 650px;" class="form-control">
+					<input type="hidden" name="boardnum" th:value="${board.boardnum}">
+					<input type="submit" value="전송" class="btn btn-primary">
+				</td>
+			</tr>
+		</table>
+		</form>
+		</div>
+		
+		<!-- 리플 목록 -->
+		<table class="board">
+			<tr th:each="reply : ${reply}">
+				<th th:text="${reply.memberid}"></th>
+				<td th:text="${reply.replytext}" th:value="${reply.replytext}" style="width:600px; height:48px"></td>
+				<td th:text="${reply.inputdate}" style="width:100px;"></td>
+				<td style="background-color:white; width:140px;">
+					<input type="hidden" th:value="${reply.replynum}">
+					<a th:href="|javascript:updateReply(${reply.replynum})|">
+						<input type="button" value="수정" class="btn btn-primary">
+					</a>
+					<a th:href="@{/board/deleteReply(replynum=${reply.replynum},boardnum=${reply.boardnum})}">
+						<input type="button" value="삭제" class="btn btn-secondary">
+					</a>
+				</td>
+			</tr>
+		</table>
+		
+		
+		<div class="button">
+			<a th:href="@{/board/list}">
+				<input type="button" value="목록" class="btn btn-primary">
+			</a>
+		</div>
+		
+	</section>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>board</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/spring5.css}"></link>
+<script>
+	<!-- 페이지 이동 스크립트  -->
+	function pagingFormSubmit(currentPage) {
+		var form = document.getElementById('pagingForm');
+		var page = document.getElementById('page');
+		page.value = currentPage;
+		form.submit();
+	}
+</script>
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+		  <div class="container-fluid">
+		    <a class="navbar-brand" th:href="@{/}">Spring5</a>
+		    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+		      <span class="navbar-toggler-icon"></span>
+		    </button>
+		    <div class="collapse navbar-collapse" id="navbarColor01">
+		      <ul class="navbar-nav me-auto">
+		        <li class="nav-item">
+		          <a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/member/join}">Join</a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/member/loginForm}">Login</a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">Logout</a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/updateForm}">Profile</a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link" th:href="@{/board/list}">Board</a>
+		        </li>
+		      </ul>
+			<form class="d-flex" th:action="@{/board/list}" method="get">
+				<input type="hidden" name="type" value="all">
+				<input class="form-control me-sm-2" type="search" placeholder="Search" name="searchWord">
+				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		    </div>
+		  </div>
+		</nav>
+		<h1>BOARD LIST</h1>
+	</header>
+	<section>
+	
+		<div class="button">
+			<div>
+			<a th:href="@{/board/write}"><input type="button" value="write" class="btn btn-primary"></a>
+			<a th:href="@{/}"><input type="button" value="home" class="btn btn-secondary"></a>
+			</div>
+		</div>
+		
+		<div class="button">	
+			<div>전체 <span th:text="${navi.totalRecordsCount}"></span></div>
+		</div>
+		<table class="list">
+			<tr>
+				<th>번호</th>
+				<th style="width: 500px;">제목</th>
+				<th>작성자</th>
+				<th>조회수</th>
+				<th>작성일</th>
+			</tr>
+			<tr th:each="list: ${list}">
+				<td th:text="${list.boardnum}"></td>
+				<td style="text-align:left;">
+					<a th:href="@{/board/read(boardnum=${list.boardnum})}" th:text="${list.title}"></a>
+				</td>
+				<td th:text="${list.memberid}"></td>
+				<td th:text="${list.hits}"></td>
+				<td th:text="${list.inputdate}"></td>
+			</tr>
+		</table>
+		
+		<!-- 페이지 이동 링크 -->     
+<!-- 	<div class="button">
+		<a th:href="|javascript:pagingFormSubmit(${navi.currentPage - navi.pagePerGroup})|">◁◁</a>
+		<a th:href="|javascript:pagingFormSubmit(${navi.currentPage - 1})|">◀</a> 
+		
+		<span th:each="counter : ${#numbers.sequence(navi.startPageGroup, navi.endPageGroup)}"> 
+			<th:block th:if="${counter == navi.currentPage}"><b></th:block>
+				<a th:text="${counter}" th:href="|javascript:pagingFormSubmit(${counter})|"></a>&nbsp;
+			<th:block th:if="${counter == navi.currentPage}"></b></th:block>
+		</span>
+		
+		<a th:href="|javascript:pagingFormSubmit(${navi.currentPage + 1})|">▶</a> 
+		<a th:href="|javascript:pagingFormSubmit(${navi.currentPage + navi.pagePerGroup})|">▷▷</a>
+		<br><br>
+		</div> -->
+		
+		<!-- 페이지 이동 시도해볼게 -->
+		
+		<div class="button" th:unless="${navi.currentPage == 0}">
+		  <ul class="pagination">
+		    <li class="page-item">
+		      <a class="page-link" th:href="|javascript:pagingFormSubmit(${navi.currentPage - navi.pagePerGroup})|">&laquo;</a>
+		    </li>
+		    <li class="page-item">
+		      <a class="page-link" th:href="|javascript:pagingFormSubmit(${navi.currentPage - 1})|">&lsaquo;</a>
+		    </li>
+		    <li class="page-item" th:each="counter : ${#numbers.sequence(navi.startPageGroup, navi.endPageGroup)}" th:classappend="${counter == navi.currentPage} ? 'active' : ''">
+		    	<th:block th:if="${counter == navi.currentPage}"></th:block>
+		     	<a class="page-link" th:text="${counter}" th:href="|javascript:pagingFormSubmit(${counter})|"></a>
+		      	<th:block th:if="${counter == navi.currentPage}"></th:block>
+		    </li>
+		    <li class="page-item">
+		      <a class="page-link" th:href="|javascript:pagingFormSubmit(${navi.currentPage + 1})|">&rsaquo;</a>
+		    </li>
+		    <li class="page-item">
+		      <a class="page-link" th:href="|javascript:pagingFormSubmit(${navi.currentPage + navi.pagePerGroup})|">&raquo;</a>
+		    </li>
+		  </ul>
+		</div>
+		
+		<div class="button">
+		<form id="pagingForm" th:action="@{/board/list}" method="get">
+		<input type="hidden" name="page" id="page">
+			<select class="form-select" id="type" name="type">
+				<option value="title" th:selected="${type} == 'title'">제목</option>
+				<option value="contents" th:selected="${type} == 'contents'">본문</option>
+				<option value="memberid" th:selected="${type} == 'memberid'">작성자</option>
+				<option value="all" th:selected="${type} == 'all'">전체</option>
+			</select>
+			
+			<input class="form-control" type="text" name="searchWord" th:value="${searchWord}">
+			<input class="btn btn-primary" type="button" value="search" th:onclick="pagingFormSubmit([[${navi.currentPage}]])">
+		</form>
+		</div>
+		
+	</section>
+</body>
+</html>

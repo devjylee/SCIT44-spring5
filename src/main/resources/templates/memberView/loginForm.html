@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>login</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/spring5.css}"></link>
+</head>
+<body>
+
+<header>
+	<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" th:href="@{/}">Spring5</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarColor01">
+	      <ul class="navbar-nav me-auto">
+	      </ul>
+		<form class="d-flex" th:action="@{/board/list}" method="get">
+			<input type="hidden" name="type" value="all">
+			<input class="form-control me-sm-2" type="search" placeholder="Search" name="searchWord">
+			<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+		</form>
+	    </div>
+	  </div>
+	</nav>
+	<h1>Login</h1>
+</header>
+
+<section>
+<form th:action="@{/member/login}" method="post">
+	<table class="login">
+		<tr>
+			<th>ID</th>
+			<td><input type="text" name="memberid"></td>
+		</tr>
+		<tr>
+			<th>PW</th>
+			<td><input type="password" name="memberpw"></td>
+		</tr>
+	</table>
+	<div class="button">
+		<input type="submit" value="로그인" class="btn btn-primary">
+	</div>
+	<div class="button" th:if="${param.error}" style="color:red;">
+		<div>🚫아이디와 비밀번호를 확인해주세요🚫</div>
+	</div>
+</form>
+</section>
+
+<!-- 에러가 났을 경우 실행 -->
+<div th:if="${param.error}">
+<script>
+	alert('아이디와 비밀번호를 확인해주세요.');
+</script>
+</div>
+
+</body>
+</html>

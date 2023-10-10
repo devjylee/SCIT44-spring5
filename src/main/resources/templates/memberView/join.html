@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>join</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/spring5.css}"></link>
+<script>
+	function check() {
+		let id = document.getElementById('id').value;
+		let pw1 = document.getElementById('pw1').value;
+		let pw2 = document.getElementById('pw2').value;
+		
+		if(id.length<3 || id.length>20) {
+			alert("ID는 3~20글자 이내로 입력해주세요.");
+			return false;
+		}
+		if(pw1 != pw2) {
+			alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+			return false;
+		}
+		return true;
+	}
+	
+	function idFormOpen() {
+		window.open('idcheck', 'idwin', 'width=500, height=300, left=100, top=100');
+	}
+</script>
+</head>
+<body>
+	<header>
+	<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" th:href="@{/}">Spring5</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarColor01">
+	      <ul class="navbar-nav me-auto">
+	      </ul>
+		<form class="d-flex" th:action="@{/board/list}" method="get">
+			<input type="hidden" name="type" value="all">
+			<input class="form-control me-sm-2" type="search" placeholder="Search" name="searchWord">
+			<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+		</form>
+	    </div>
+	  </div>
+	</nav>
+	<h1>JOIN</h1>
+	</header>
+<form th:action="@{/member/join}" method="post" onsubmit="return check()">
+	<table class="join">
+		<tr>
+			<th>ID</th>
+			<td>
+				<input type="text" name="memberid"  id="memberid" placeholder="ID중복확인 이용" onclick="idFormOpen()" readonly>
+				<input type="button" value="ID중복확인" onclick="idFormOpen()" class="btn btn-secondary">
+			</td>
+		</tr>
+		<tr>
+			<th>비밀번호</th>
+			<td>
+				<input type="password" name="memberpw" id="memberpw1" placeholder="비밀번호 입력"><br>
+				<input type="password" id="memberpw2" placeholder="비밀번호 다시 입력">
+			</td>
+		</tr>
+		<tr>
+			<th>이름</th>
+			<td>
+				<input type="text" name="membername" placeholder="이름 입력">
+			</td>
+		</tr>
+		<tr>
+			<th>이메일</th>
+			<td>
+				<input type="text" name="email" placeholder="이메일 입력">
+			</td>
+		</tr>
+		<tr>
+			<th>전화번호</th>
+			<td>
+				<input type="text" name="phone" placeholder="전화번호 입력">
+			</td>
+		</tr>
+		<tr>
+			<th>주소</th>
+			<td>
+				<input type="text" name="address" placeholder="주소 입력" style="width:250px;">
+			</td>
+		</tr>
+	</table>
+	<div class="button">
+		<input type="submit" value="가입" class="btn btn-primary">
+		<input type="reset" value="다시 쓰기" class="btn btn-secondary">
+	</div>
+</form>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>update</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/spring5.css}"></link>
+<style>
+	html{
+	    overflow: hidden;
+	}
+</style>
+<script>
+	function winReload() {
+		window.opener.location.reload();
+	}
+</script>
+</head>
+<body>
+	<form th:action="@{/board/updateReply}" method="post" id="updateForm" onsubmit="return winReload()">
+	<div class="input-group mb-3" style="margin: 10px;">
+		<input type="text" class="form-control" name="replytext" th:value="${reply.replytext}">
+		<input type="hidden" name="replynum" th:value="${reply.replynum}">
+		<input type="hidden" name="boardnum" th:value="${reply.boardnum}">
+		<input type="submit" class="btn btn-primary" value="수정" id="button-addon2">
+	</div>
+	</form>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>update</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/spring5.css}"></link>
+<script>
+
+</script>
+</head>
+<body>
+	<header>
+	<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" th:href="@{/}">Spring5</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarColor01">
+	      <ul class="navbar-nav me-auto">
+	      </ul>
+		<form class="d-flex" th:action="@{/board/list}" method="get">
+			<input type="hidden" name="type" value="all">
+			<input class="form-control me-sm-2" type="search" placeholder="Search" name="searchWord">
+			<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+		</form>
+	    </div>
+	  </div>
+	</nav>
+	<h1>UPDATE</h1>
+	</header>
+	<section>
+		<form th:action="@{/board/update}" enctype="multipart/form-data" method="post">
+		<table class="write">
+			<tr>
+				<th>작성자</th>
+				<td th:text="${board.memberid}" name="memberid"></td>
+			</tr>
+			<tr>
+				<th>작성일</th>
+				<td th:text="${board.inputdate}" name="inputdate"></td>
+			</tr>
+			<tr>
+				<th>조회수</th>
+				<td th:text="${board.hits}" name="hits"></td>
+			</tr>
+			<tr>
+				<th>제목</th>
+				<td>
+				<input type="text" th:value="${board.title}" name="title" class="title">
+				</td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td class="contents">
+					<textarea th:text="${board.contents}" name="contents" class="contents"></textarea>
+				</td>
+			</tr>
+				<tr>
+				<th>첨부파일</th>
+				<td>
+				<input type="file" name="upload" class="title">
+				</td>
+			</tr>
+		</table>
+		<input type="hidden" th:value="${board.boardnum}" name="boardnum">
+		<input type="hidden" th:value="${board.originalfile}" name="originalfile">
+		<input type="hidden" th:value="${board.savedfile}" name="savedfile">
+		<div class="button">
+			<input type="submit" value="수정" class="btn btn-primary">
+		</div>
+		</form>
+	</section>
+</body>
+</html>

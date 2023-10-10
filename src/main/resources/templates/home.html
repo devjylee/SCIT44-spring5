@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>home</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/spring5.css}"></link>
+</head>
+<body>
+	<header>
+	<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" th:href="@{/}">Spring5</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarColor01">
+	      <ul class="navbar-nav me-auto">
+	        <li class="nav-item">
+	          <a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/member/join}">Join</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/member/loginForm}">Login</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">Logout</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/updateForm}">Profile</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" th:href="@{/board/list}">Board</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/board/listAdmin}">Admin</a>
+	        </li>
+	      </ul>
+		<form class="d-flex" th:action="@{/board/list}" method="get">
+			<input type="hidden" name="type" value="all">
+			<input class="form-control me-sm-2" type="search" placeholder="Search" name="searchWord">
+			<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+		</form>
+	    </div>
+	  </div>
+	</nav>
+	</header>
+	
+	<section class="home">
+	
+	<h1>SPRING 5</h1>
+	<div sec:authorize="isAuthenticated()">
+		<p><span th:text="${#authentication.name}"></span>님 환영합니다</p>
+	</div>
+		<a th:href="@{/board/list}"><button type="button" class="btn btn-primary btn-lg">ENTER</button></a>
+	
+	</section>
+</body>
+</html>

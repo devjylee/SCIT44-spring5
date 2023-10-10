@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>idcheck</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<link rel="stylesheet" th:href="@{/css/spring5.css}"></link>
+<script>
+	function check() {
+		let id = document.getElementById('searchid');
+		if(id.value == '') {
+			alert("검색할 id를 입력하세요.");
+			return false;
+		}
+		return true;
+	}
+	
+	//가입 폼에 입력한 아이디를 회원가입 폼으로 전달
+	function inputID(id) {
+		opener.document.getElementById('memberid').value = id;
+		this.close();
+	}
+</script>
+</head>
+
+<body>
+<h1>ID Check</h1>
+<form th:action="@{/member/idcheck}" method="post" onsubmit="return check()">
+검색할 ID
+<input type="text" name="searchid" id="searchid" th:value="${searchid}" class="form-control">
+<input type="submit" value="검색" class="btn btn-primary">
+</form>
+
+<!-- [[${searchid}]] -->
+<!-- [[${result}]] -->
+
+<!-- 검색 후에만 출력 -->
+<div th:if="${searchid}">
+
+	<!-- 사용 가능한 경우 -->
+	<div th:if="${result}">
+		<p th:text="|${searchid}는 사용할 수 있는 ID입니다.|"></p>
+		<p><input type="button" value="ID사용하기" th:id="${searchid}" onclick="inputID(this.getAttribute('id'))"></p>
+	</div>
+	
+	<!-- 사용 불가능한 경우 -->
+	<div th:unless="${result}">
+	<p th:text="|${searchid}는 이미 사용중인 ID입니다.|"></p>
+	</div>
+	
+</div>
+
+</body>
+</html>
